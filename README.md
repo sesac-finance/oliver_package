@@ -8,6 +8,11 @@
    * │ ├── db_utils.py
    * └──  
 
+ * Project File
+   * round.txt : exchange currency round
+   * subAssignment.py : main python file 
 
- * crawling_utils : crawling function collection
- * db_utils : database function collection
+ * oliver_util_package : util collection 
+   * crawling_utils.py : crawling function collection
+   * db_utils.py : database function collection
+ * 
