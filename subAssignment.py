@@ -1,16 +1,11 @@
-import itertools
-
-import numpy as np
 import pandas as pd
-import json
+# import json
 import selenium
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 import urllib.error as urle
-import collections
 import datetime
 
 # custom utils
@@ -23,14 +18,10 @@ chrome_options.add_experimental_option("detach", True)
 
 chrome_path = r'D:\99. Dev\chromedriver.exe'
 driver = webdriver.Chrome(chrome_path, options=chrome_options)
-# page_number = 1
-
-crawlingFlag = False
 
 try:
 
-    if (result := crawling_utils.without_kor(
-            crawling_utils.crawling_element('https://finance.naver.com/marketindex/?tabSel=exchange#tab_section',
+    if (result := crawling_utils.without_kor(crawling_utils.crawling_element('https://finance.naver.com/marketindex/?tabSel=exchange#tab_section',
                                             '.section_exchange .round'))) != (
             round_numb := open('./round.txt', 'r').read().rstrip()):
         # if True:
