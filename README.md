@@ -3,12 +3,7 @@
  
  
  - for folder structure
- 
- ¦§¦¡¦¡ 
- ¦¢   ¦§¦¡¦¡ 
- ¦¢   ¦¦¦¡¦¡ 
- ¦§¦¡¦¡
- 
- ¦¢   ¦¦¦¡¦¡   ¦¦¦¡¦¡ 
- 
- ¦¢   ¦§¦¡¦¡   ¦¦¦¡¦¡
+   â”œâ”€â”€ oliver_util_package 
+   â”‚ â”œâ”€â”€ crawling_utils.py
+   â”‚ â”œâ”€â”€ db_utils.py
+   â””â”€â”€ 
