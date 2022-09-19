@@ -24,8 +24,20 @@ chrome_options.add_experimental_option("detach", True)
 chrome_path = r'D:\99. Dev\chromedriver.exe'
 driver = webdriver.Chrome(chrome_path, options=chrome_options)
 
+# for to see all data
+pd.set_option('display.max_columns', None)
+
+"""
+from oliver_util_package import email_utils
+try:
+    email_utils.send_mail('lvsin@naver.com', '결제확인메일', 'ㅋㅋㅋㅋㅋ', 'FILE')
+except Exception as e:
+    print("Error : ", e)
+pass
+"""
 try:
     logger = log_utils.logging.getLogger()
+
 
     if (result := crawling_utils.without_kor(
             crawling_utils.crawling_element('https://finance.naver.com/marketindex/?tabSel=exchange#tab_section',
@@ -61,22 +73,24 @@ try:
         columns = ['date', 'round', 'curren', 'trade_std', 'currency_send', 'currency_receive', 'by_dollar']
         df = pd.DataFrame(exchange_rate_lists, columns=columns)
 
-        print(df)
+        # print(df)
+        # print(klvwjlk)
         logger.info(df)
+
         # round update
         open('./round.txt', 'w').write(result)
     else:
-        print("Unchanged exchange rate data!")
+        logger.info("Unchanged exchange rate data!")
 
 
 # print(exchange_rate_lists)
 
 except urle.HTTPError as e:
-    print('HTTPError!\n', e)
-except urle.HTTPError as e:
-    print('The server could not be found!\n'.e)
+    logger.warn('HTTPError!\n', e)
+except urle.URLError as e:
+    logger.warn('The server could not be found!\n', e)
 finally:
-    print('Finally')
+    logger.info('Finally')
 
 """
 while page_number < 5:

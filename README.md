@@ -9,16 +9,17 @@
    * │ ├── email_utils.py
    * │ ├── io_utils.py
    * │ ├── log_utils.py 
+   * │ └── 
    * └──  
 
  * Project File
-   * round.txt : exchange currency round
-   * subAssignment.py : main python file 
+   * round.txt : exchange rate round
+   * subAssignment.py : main file 
 
- * oliver_util_package : util collection 
-   * crawling_utils.py : crawling function collection
-   * db_utils.py : database function collection
-   * email_utils.py : email and file attachment collection
+ * oliver_util_package : Utility collection 
+   * crawling_utils.py : Crawling function collection
+   * db_utils.py : Database function collection
+   * email_utils.py : Email and file attachment collection
    * io_utils.py : Configuration & IO collection
-   * log_utils.py : logging manage collection
+   * log_utils.py : Logging collection
  * 

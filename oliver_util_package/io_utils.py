@@ -1,14 +1,14 @@
 
 def get_config_data(param: str) -> dict():
     """
-    read configuration file
+    Read configuration from config_file
 
     :param {
             email: 'SMTP,
             TELEGRAM: TELEGRAM,
-            REAL_DB: RDS DB,
-            TEST_DB: TEST DB}
-    :return:
+            REAL_DB: RDS_DB,
+            TEST_DB: TEST_DB}
+    :return config_data:dict()
     """
     param_dict = {
         'email': 'SMTP',
@@ -17,7 +17,7 @@ def get_config_data(param: str) -> dict():
         'test_db': 'TEST DB'
     }
 
-    with open('../config_file', 'r') as f:
+    with open('./config_file', 'r') as f:
         config_data = param_dict[param]
         configs = f.readlines()
         config_dict = {}

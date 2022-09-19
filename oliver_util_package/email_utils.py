@@ -1,22 +1,32 @@
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
+
 # for attachments
 from email.mime.base import MIMEBase
 from email import encoders
+
 # get file_name without directories
 from os.path import basename
 import datetime
+
 # custom package
-import io_utils
+from oliver_util_package import io_utils
+from oliver_util_package import log_utils
 
-def file_attach(file_path):
-    """
-    For email file attachment
+import logging
 
-    :param file_path:
-    :return:
+logger = log_utils.logging.getLogger()
+
+def file_attach(file_path: str) -> MIMEBase:
     """
+    Email file attachment
+
+    param: file_path:str
+    return: email_file:MIMEBase
+    """
+    logger.info(file_path)
+
     # email attachment
     email_file = MIMEBase('application', 'octet-stream')
     with open(file_path, 'rb') as f:
@@ -30,18 +40,21 @@ def file_attach(file_path):
     return email_file
 
 
-def send_mail(receiver, subject, contents, file_path):
+def send_mail(receiver:str, subject:str, contents:str, file_path:str):
     """
-    To send email
+    Sending email
 
-    :param receiver:
-    :param subject:
-    :param contents:
-    :param file_path:
-    :return:
+    :param receiver:str
+    :param subject:str
+    :param contents:str
+    :param file_path:str
+    :return: void
     """
     try:
         email_dict = io_utils.get_config_data("email")
+
+        logger.info(email_dict)
+        logger.info(receiver + ' : ' +  subject + ' : ' +   contents + ' : ' +  file_path)
 
         # email info
         msg = MIMEMultipart('alternative')
@@ -66,12 +79,11 @@ def send_mail(receiver, subject, contents, file_path):
         smtp.sendmail(email_dict['SMTP_USER'], receiver, msg.as_string(contents))
         print('Sending email Success!')
     except Exception as e:
-        print(e)
-        print('Error!!!')
+        logger.warn(e)
         pass
     finally:
         smtp.close()
-        print('Sending Email Done!')
+        logger.info('Sending Email Done!')
 
 
 # email sending test
