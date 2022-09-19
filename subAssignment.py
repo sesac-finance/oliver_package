@@ -1,3 +1,5 @@
+import logging
+
 import pandas as pd
 # import json
 import selenium
@@ -10,6 +12,9 @@ import datetime
 
 # custom utils
 from oliver_util_package import crawling_utils
+from oliver_util_package import log_utils
+import logging
+
 
 # 브라우저 꺼짐 방지
 chrome_options = Options()
@@ -20,10 +25,11 @@ chrome_path = r'D:\99. Dev\chromedriver.exe'
 driver = webdriver.Chrome(chrome_path, options=chrome_options)
 
 try:
+    logger = log_utils.logging.getLogger()
 
-    if (result := crawling_utils.without_kor(crawling_utils.crawling_element('https://finance.naver.com/marketindex/?tabSel=exchange#tab_section',
-                                            '.section_exchange .round'))) != (
-            round_numb := open('./round.txt', 'r').read().rstrip()):
+    if (result := crawling_utils.without_kor(
+            crawling_utils.crawling_element('https://finance.naver.com/marketindex/?tabSel=exchange#tab_section',
+                                            '.section_exchange .round'))) != (open('./round.txt', 'r').read().rstrip()):
         # if True:
         driver.get("https://finance.naver.com/marketindex/exchangeList.naver")
         crawling_results = driver.find_elements(By.CLASS_NAME, 'tbl_area tbody tr')
@@ -35,24 +41,28 @@ try:
             temp_list = exchange_data_array[len(exchange_data_array) - 6:]
 
             if not 'N/A' in temp_list:
+
                 temp = []
                 currency_name = crawling_utils.without_kor(exchange_rate_info.find_element(By.CLASS_NAME, 'tit').text)
 
                 temp.append(datetime.datetime.now().strftime('%Y-%m-%d'))
-                # temp.append("result")
+
                 temp.append(result)
                 temp.append(currency_name)
                 temp.append(temp_list[0])
                 temp.append(temp_list[3])
                 temp.append(temp_list[4])
                 temp.append(temp_list[-1])
-                # print("temp_list", temp)
+
+                logger.info(temp)
+
                 exchange_rate_lists.append(temp)
 
         columns = ['date', 'round', 'curren', 'trade_std', 'currency_send', 'currency_receive', 'by_dollar']
         df = pd.DataFrame(exchange_rate_lists, columns=columns)
 
         print(df)
+        logger.info(df)
         # round update
         open('./round.txt', 'w').write(result)
     else:
