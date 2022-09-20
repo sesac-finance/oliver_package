@@ -3,12 +3,8 @@ def get_config_data(param: str) -> dict():
     """
     Read configuration from config_file
 
-    :param {
-            email: 'SMTP,
-            TELEGRAM: TELEGRAM,
-            REAL_DB: RDS_DB,
-            TEST_DB: TEST_DB}
-    :return config_data:dict()
+    :param param:str in {email: 'SMTP,TELEGRAM: TELEGRAM,REAL_DB: RDS_DB,TEST_DB: TEST_DB}
+    :return config_data:dict
     """
     param_dict = {
         'email': 'SMTP',

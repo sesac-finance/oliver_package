@@ -14,12 +14,12 @@ def without_kor(text: str) -> str:
     :param text:str
     :return: str
     """
-    logger.info(text)
+    # logger.info(text)
     return re.sub('[가-힣]', '', text).strip()
 
 def crawling_element(url: str, element_name: str) -> str:
     """
-    crawling element from website(url) and return one element
+    website(url) crawling and return one element
 
     :param url:str
     :param element_name:str
@@ -32,10 +32,10 @@ def crawling_element(url: str, element_name: str) -> str:
 
 def crawling_elements(url: str, element_name: str) -> list:
     """
-    crawling element from website(url) and return 1 or more elements
+    website(url) crawling and return 1 or more elements
 
-    :param url:
-    :param element_name:
+    :param url:str
+    :param element_name:str
     :return soup.select:list
     """
     response = requests.get(url, headers=HEADERS)
