@@ -40,6 +40,56 @@ def file_attach(file_path: str) -> MIMEBase:
     return email_file
 
 
+def send_mail_html(receiver:str, subject:str, contents_html:str, file_path:str):
+    """
+    Sending email by html style
+
+    :param receiver:str
+    :param subject:str
+    :param contents(html):str
+    :param file_path:str
+    :return: void
+    """
+    try:
+        email_dict = io_utils.get_config_data("email")
+
+        # logger.info(email_dict)
+        logger.info(receiver + ' : ' +  subject + ' : ' +  file_path)
+        # logger.info(contents_html)
+
+        # email info
+        msg = MIMEMultipart()
+
+        msg['FROM'] = email_dict['SMTP_USER']
+        msg['TO'] = receiver
+        msg['SUBJECT'] = subject
+
+        start = """<html>
+                        <body>
+                            <center>"""
+
+        end = """           </center>
+                        </body>
+                    </html>"""
+
+        msg.attach(MIMEText(start + contents_html + end, "html"))
+
+        if file_path != 'FILE':
+            msg.attach(file_attach(file_path))
+
+        smtp = smtplib.SMTP_SSL(email_dict['SMTP_SERVER'], email_dict['SMTP_PORT'])
+        logger.info('Serv connection Success!')
+        smtp.login(email_dict['SMTP_USER'], email_dict['SMTP_PASSWORD'])
+        logger.info('Login Success!')
+        smtp.sendmail(email_dict['SMTP_USER'], receiver, msg.as_string())
+        logger.info('Sending email Success!')
+    except Exception as e:
+        logger.warn(e)
+        pass
+    finally:
+        smtp.close()
+        logger.info('Sending Email Done!')
+
 def send_mail(receiver:str, subject:str, contents:str, file_path:str):
     """
     Sending email
@@ -59,9 +109,6 @@ def send_mail(receiver:str, subject:str, contents:str, file_path:str):
         # email info
         msg = MIMEMultipart('alternative')
 
-        # email contents
-        contents = contents
-
         msg['FROM'] = email_dict['SMTP_USER']
         msg['TO'] = receiver
         msg['SUBJECT'] = subject
@@ -73,11 +120,11 @@ def send_mail(receiver:str, subject:str, contents:str, file_path:str):
             msg.attach(file_attach(file_path))
 
         smtp = smtplib.SMTP_SSL(email_dict['SMTP_SERVER'], email_dict['SMTP_PORT'])
-        print('Serv connection Success!')
+        logger.info('Serv connection Success!')
         smtp.login(email_dict['SMTP_USER'], email_dict['SMTP_PASSWORD'])
-        print('Login Success!')
+        logger.info('Login Success!')
         smtp.sendmail(email_dict['SMTP_USER'], receiver, msg.as_string(contents))
-        print('Sending email Success!')
+        logger.info('Sending email Success!')
     except Exception as e:
         logger.warn(e)
         pass
