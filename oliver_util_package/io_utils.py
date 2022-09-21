@@ -9,8 +9,8 @@ def get_config_data(param: str) -> dict():
     param_dict = {
         'email': 'SMTP',
         'telegram': 'TELEGRAM',
-        'readl_db': 'RDS DB',
-        'test_db': 'TEST DB'
+        'readl_db': 'RDS_DB',
+        'test_db': 'TEST_DB'
     }
 
     with open('./config_file', 'r') as f:

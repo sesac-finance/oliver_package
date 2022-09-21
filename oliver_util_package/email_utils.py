@@ -84,7 +84,7 @@ def send_mail_html(receiver:str, subject:str, contents_html:str, file_path:str):
         smtp.sendmail(email_dict['SMTP_USER'], receiver, msg.as_string())
         logger.info('Sending email Success!')
     except Exception as e:
-        logger.warn(e)
+        logger.warning(e)
         pass
     finally:
         smtp.close()
@@ -92,7 +92,7 @@ def send_mail_html(receiver:str, subject:str, contents_html:str, file_path:str):
 
 def send_mail(receiver:str, subject:str, contents:str, file_path:str):
     """
-    Sending email
+    Sending email with string text
 
     :param receiver:str
     :param subject:str
@@ -126,7 +126,7 @@ def send_mail(receiver:str, subject:str, contents:str, file_path:str):
         smtp.sendmail(email_dict['SMTP_USER'], receiver, msg.as_string(contents))
         logger.info('Sending email Success!')
     except Exception as e:
-        logger.warn(e)
+        logger.warning(e)
         pass
     finally:
         smtp.close()

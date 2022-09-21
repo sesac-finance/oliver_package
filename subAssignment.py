@@ -90,7 +90,7 @@ try:
             final_convert = round(second_convert * float(back_to_home_currency))
             final_profit = round(final_convert - 1000000.0)
 
-            exchange_flow = 'KOR -> ' + cases[0] + ' -> ' + cases[1] + ' -> KOR'
+            exchange_flow = 'KRW -> ' + cases[0] + ' -> ' + cases[1] + ' -> KRW'
             temp_arbitrage.append(exchange_flow)
             temp_arbitrage.append(str(format(first_convert, ',')) + '(' + cases[0] + ')')
             temp_arbitrage.append(str(format(second_convert, ',')) + '(' + cases[1] + ')')
@@ -99,10 +99,10 @@ try:
             possible_arbitrage_list.append(temp_arbitrage)
 
         columns_possible_arbitrage = ['재정거래 흐름', '1차 환전', '2차 환전',
-                                      '거래결과(원화)',
-                                      '최종수익(원화)']
+                                      '거래결과(KRW)',
+                                      '최종수익(KRW)']
         possible_arbitrage_df = pd.DataFrame(possible_arbitrage_list, columns=columns_possible_arbitrage).sort_values(
-            by='거래결과(원화)', ascending=False)
+            by='거래결과(KRW)', ascending=False)
 
         possible_arbitrage_df.reset_index(inplace=True, drop=True)
         # Arbitrage Calculation Compelte : possible_arbitrage_df
@@ -139,7 +139,7 @@ try:
                + possible_arbitrage_str + build_table(possible_arbitrage_df[0:10], 'orange_dark', font_size='medium',
                                                       font_family='Open Sans, sans-serif',
                                                       conditions={
-                                                          '최종수익': {
+                                                              '최종수익(KRW)': {
                                                               'min': 0,
                                                               'max': 1,
                                                               'min_color': 'red',
