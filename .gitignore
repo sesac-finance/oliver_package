@@ -118,6 +118,7 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+oliver_util_package/excel/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
