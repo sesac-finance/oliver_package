@@ -39,10 +39,10 @@ pd.set_option('display.colheader_justify', 'left')
 try:
     logger = log_utils.logging.getLogger()
 
-    # if (result := crawling_utils.without_kor(
-    #         crawling_utils.crawling_element('https://finance.naver.com/marketindex/?tabSel=exchange#tab_section',
-    #                                         '.section_exchange .round'))) != (open('./round.txt', 'r').read().rstrip()):
-    if True:
+    if (result := crawling_utils.without_kor(
+            crawling_utils.crawling_element('https://finance.naver.com/marketindex/?tabSel=exchange#tab_section',
+                                            '.section_exchange .round'))) != (open('./round.txt', 'r').read().rstrip()):
+    # if True:
         driver.get("https://finance.naver.com/marketindex/exchangeList.naver")
         crawling_results = driver.find_elements(By.CLASS_NAME, 'tbl_area tbody tr')
 
@@ -57,8 +57,8 @@ try:
                 currency_name = crawling_utils.without_kor(exchange_rate_info.find_element(By.CLASS_NAME, 'tit').text)
 
                 temp.append(today)
-                # temp.append(result)
-                temp.append("result")
+                temp.append(result)
+                # temp.append("result")
                 temp.append(currency_name)
                 temp.append(temp_list[0].replace(',', ''))
                 temp.append(temp_list[3].replace(',', ''))
@@ -109,8 +109,9 @@ try:
         # logger.info(possible_arbitrage_df[['재정거래 흐름', '재정거래 결과', '최종수익']])
 
         # Saving total exchange rate data to excel
-        path = './oliver_util_package/excel/' + today + '_회차' + '.xlsx'
-        with pd.ExcelWriter(path) as writer:
+        excel_path = f'./oliver_util_package/excel/{today}_{result}회차.xlsx'
+        # excel_path = './oliver_util_package/excel/' + today + '_회차.xlsx'
+        with pd.ExcelWriter(excel_path) as writer:
             basic_currency_df.to_excel(writer, sheet_name='환율정보')
             possible_arbitrage_df.to_excel(writer, sheet_name='재정거래 시나리오')
 
@@ -130,7 +131,8 @@ try:
             '''
             news_str_list.append(temp)
 
-        currency_info_str = f'<h3>{today} 고시회차 1의 환율정보</h3><br/>'
+        currency_info_str = f'<h3>{today} 고시 {result}회차의 환율정보</h3><br/>'
+        # currency_info_str = f'<h3>{today} 고시회차 1의 환율정보</h3><br/>'
         possible_arbitrage_str = f'<h3>재정거래 시나리오 리스트</h3><br/>'
         body = currency_info_str + build_table(basic_currency_df[0:15], 'blue_dark', width="120px", font_size='medium',
                                                text_align='center',
@@ -147,11 +149,11 @@ try:
                                                           }}) + '<br/>'.join(news_str_list)
 
         # Sending email by html style
-        email_utils.send_mail_html('lvsin@naver.com', '차 환율정보 및 재정거래 시나리오', body, path)
+        email_utils.send_mail_html('lvsin@naver.com', f'{result}차 환율정보 및 재정거래 시나리오', body, excel_path)
 
         # round update
-        open('./round.txt', 'w').write("1")
-        # open('./round.txt', 'w').write(result)
+        # open('./round.txt', 'w').write("1")
+        open('./round.txt', 'w').write(result)
     else:
         logger.info("Unchanged exchange rate data!")
 
