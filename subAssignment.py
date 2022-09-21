@@ -130,7 +130,7 @@ try:
             '''
             news_str_list.append(temp)
 
-        currency_info_str = f'<h3>오늘의 고시회차 1의 환율정보</h3><br/>'
+        currency_info_str = f'<h3>{today} 고시회차 1의 환율정보</h3><br/>'
         possible_arbitrage_str = f'<h3>재정거래 시나리오 리스트</h3><br/>'
         body = currency_info_str + build_table(basic_currency_df[0:15], 'blue_dark', width="120px", font_size='medium',
                                                text_align='center',
