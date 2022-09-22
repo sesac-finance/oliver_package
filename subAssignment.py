@@ -32,10 +32,9 @@ options.add_argument('--headless')
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 options.add_argument('user-agent={0}'.format(user_agent))
-driver = webdriver.Chrome('./chromedriver',options=options)
 
 
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
 
 # for to see all data
 pd.set_option('display.max_columns', None)
