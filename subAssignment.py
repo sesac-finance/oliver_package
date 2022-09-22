@@ -20,22 +20,6 @@ from oliver_util_package import log_utils
 from oliver_util_package import email_utils
 import logging
 
-# 브라우저 꺼짐 방지
-# chrome_options = Options()
-# chrome_options.add_experimental_option("detach", True)
-# chrome_options.add_argument("User-Agent:'application/json;charset=utf-8'")
-
-# For Ubuntu
-user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'
-options = webdriver.ChromeOptions()
-options.add_argument('--headless')
-options.add_argument('--no-sandbox')
-options.add_argument('--disable-dev-shm-usage')
-options.add_argument('user-agent={0}'.format(user_agent))
-options.binary_location = '/home/ubuntu/.wdm/drivers/chromedriver/linux64/105.0.5195/chromedriver'
-
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
-
 # for to see all data
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
@@ -46,6 +30,23 @@ pd.set_option('display.colheader_justify', 'left')
 # tabulate.WIDE_CHARS_MODE=False
 
 try:
+
+    # 브라우저 꺼짐 방지
+    # chrome_options = Options()
+    # chrome_options.add_experimental_option("detach", True)
+    # chrome_options.add_argument("User-Agent:'application/json;charset=utf-8'")
+
+    # For Ubuntu
+    user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'
+    options = webdriver.ChromeOptions()
+    options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    options.add_argument('user-agent={0}'.format(user_agent))
+    # options.binary_location = '/home/ubuntu/.wdm/drivers/chromedriver/linux64/105.0.5195/chromedriver'
+
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+
     logger = log_utils.logging.getLogger()
 
     if (result := crawling_utils.without_kor(
