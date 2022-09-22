@@ -109,6 +109,7 @@ try:
             by='거래결과(KRW)', ascending=False)
         possible_arbitrage_df.reset_index(inplace=True, drop=True)
         # Arbitrage Calculation Compelte : possible_arbitrage_df
+        
 
         logger.debug(possible_arbitrage_df[['재정거래 흐름', '거래결과(KRW)', '최종수익(KRW)']])
 
