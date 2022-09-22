@@ -32,7 +32,7 @@ options.add_argument('--headless')
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 options.add_argument('user-agent={0}'.format(user_agent))
-
+options.binary_location = '/home/ubuntu/.wdm/drivers/chromedriver/linux64/105.0.5195/chromedriver'
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
 
