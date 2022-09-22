@@ -25,6 +25,15 @@ import logging
 # chrome_options.add_experimental_option("detach", True)
 # chrome_options.add_argument("User-Agent:'application/json;charset=utf-8'")
 
+# For Ubuntu
+options = webdriver.ChromeOptions()
+options.add_argument('--headless')
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-dev-shm-usage')
+options.add_argument('user-agent={0}'.format(user_agent))
+driver = webdriver.Chrome('./chromedriver',options=options)
+
+
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
 # for to see all data
