@@ -31,7 +31,6 @@ pd.set_option('display.colheader_justify', 'left')
 # tabulate.WIDE_CHARS_MODE=False
 
 try:
-
     # For local test
     # chrome_options = Options()
     # chrome_options.add_experimental_option("detach", True)
