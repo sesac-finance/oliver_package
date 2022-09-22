@@ -10,7 +10,6 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
 import urllib.error as urle
 import datetime
 
@@ -20,7 +19,9 @@ from oliver_util_package import log_utils
 from oliver_util_package import email_utils
 import logging
 
-# for to see all data
+logger = log_utils.logging.getLogger()
+
+# to see all data
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 pd.set_option('display.width', 100)
@@ -29,11 +30,9 @@ pd.set_option('display.colheader_justify', 'left')
 # if DataFrame kor broken
 # tabulate.WIDE_CHARS_MODE=False
 
-logger = log_utils.logging.getLogger()
-
 try:
 
-    # 브라우저 꺼짐 방지
+    # For local test
     # chrome_options = Options()
     # chrome_options.add_experimental_option("detach", True)
     # chrome_options.add_argument("User-Agent:'application/json;charset=utf-8'")
@@ -45,15 +44,13 @@ try:
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('user-agent={0}'.format(user_agent))
-    # options.binary_location = '/home/ubuntu/.wdm/drivers/chromedriver/linux64/105.0.5195/chromedriver'
 
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-
 
     if (result := crawling_utils.without_kor(
             crawling_utils.crawling_element('https://finance.naver.com/marketindex/?tabSel=exchange#tab_section',
                                             '.section_exchange .round'))) != (open('./round.txt', 'r').read().rstrip()):
-    # if True:
+        # if True:
         driver.get("https://finance.naver.com/marketindex/exchangeList.naver")
         crawling_results = driver.find_elements(By.CLASS_NAME, 'tbl_area tbody tr')
 
@@ -77,11 +74,10 @@ try:
                 temp.append(temp_list[-1].replace(',', ''))
                 exchange_rate_lists.append(temp)
 
-        columns_basic_currency = ['날짜', '회차', '통화', '매매기준율', '송금 보내실때', '송금 받으실때',
-                                  '미화환산율']
+        columns_basic_currency = ['날짜', '회차', '통화', '매매기준율', '송금 보내실때', '송금 받으실때', '미화환산율']
         # basic data complete
         basic_currency_df = pd.DataFrame(exchange_rate_lists, columns=columns_basic_currency)
-        # logger.info(tabulate(basic_currency_df, headers='keys', tablefmt='pretty'))
+        logger.debug(tabulate(basic_currency_df, headers='keys', tablefmt='pretty'))
 
         possible_arbitrage_list = []
         # calculate possible arbitrage list
@@ -93,11 +89,11 @@ try:
                 '송금 받으실때'].values
             # currency 1 / currency 2
             final_multiple = float(currency_1_send) / float(currency_2_send)
-            # won -> currency 1
+            # krw -> currency 1
             first_convert = round(float(1000000.0 / float(currency_1_send)), 2)
             # currency 1 -> currency 2
             second_convert = round(float(first_convert * final_multiple), 2)
-            # currency 2 -> won
+            # currency 2 -> krw
             final_convert = round(second_convert * float(back_to_home_currency))
             final_profit = round(final_convert - 1000000.0)
 
@@ -109,15 +105,13 @@ try:
             temp_arbitrage.append(format(final_profit, ','))
             possible_arbitrage_list.append(temp_arbitrage)
 
-        columns_possible_arbitrage = ['재정거래 흐름', '1차 환전', '2차 환전',
-                                      '거래결과(KRW)',
-                                      '최종수익(KRW)']
+        columns_possible_arbitrage = ['재정거래 흐름', '1차 환전', '2차 환전', '거래결과(KRW)', '최종수익(KRW)']
         possible_arbitrage_df = pd.DataFrame(possible_arbitrage_list, columns=columns_possible_arbitrage).sort_values(
             by='거래결과(KRW)', ascending=False)
-
         possible_arbitrage_df.reset_index(inplace=True, drop=True)
         # Arbitrage Calculation Compelte : possible_arbitrage_df
-        # logger.info(possible_arbitrage_df[['재정거래 흐름', '재정거래 결과', '최종수익']])
+
+        logger.debug(possible_arbitrage_df[['재정거래 흐름', '거래결과(KRW)', '최종수익(KRW)']])
 
         # Saving total exchange rate data to excel
         excel_path = f'./oliver_util_package/excel/{today}_{result}회차.xlsx'
@@ -128,8 +122,7 @@ try:
 
         # Exchange rate News part
         news_list = crawling_utils.crawling_elements(
-            'https://finance.naver.com/marketindex/news/newsList.naver?category=exchange',
-            '.news_list li dt a')
+            'https://finance.naver.com/marketindex/news/newsList.naver?category=exchange', '.news_list li dt a')
 
         news_str_list = []
         news_start = '<tr><td><strong><a href="https://finance.naver.com'
@@ -141,7 +134,9 @@ try:
                     {news_start}{news['href']}" target="_blank"><h2>{news.text}</h2></a></strong></font><br/><h3>{'. '.join(news_detail[0:2])}...</h3>{news_end}
             '''
             news_str_list.append(temp)
+            logger.debug(temp)
 
+        # create html email body
         currency_info_str = f'<h3>{today} 고시 {result}회차의 환율정보</h3><br/>'
         # currency_info_str = f'<h3>{today} 고시회차 1의 환율정보</h3><br/>'
         possible_arbitrage_str = f'<h3>재정거래 시나리오 리스트</h3><br/>'
@@ -152,7 +147,7 @@ try:
                + possible_arbitrage_str + build_table(possible_arbitrage_df[0:10], 'orange_dark', font_size='medium',
                                                       font_family='Open Sans, sans-serif',
                                                       conditions={
-                                                              '최종수익(KRW)': {
+                                                          '최종수익(KRW)': {
                                                               'min': 0,
                                                               'max': 1,
                                                               'min_color': 'red',
@@ -173,29 +168,6 @@ except urle.HTTPError as e:
 except urle.URLError as e:
     logger.warning('The server could not be found!\n', e)
 except Exception as e:
-    logger.warning("Error!\n", e)
+    logger.error("Error!\n", e)
 finally:
     logger.info('Finally')
-
-"""
-while page_number < 5:
-    driver.get(f'https://finance.naver.com/marketindex/worldExchangeList.naver?key=exchange&page={page_number}')
-
-    exchange_rate_lists = driver.find_elements(By.CLASS_NAME, 'tbl_exchange tr')
-    for exchange_rate_info in exchange_rate_lists[1:]:
-        temp = {
-            '통화명': exchange_rate_info.find_element(By.CLASS_NAME, 'tit').text,
-            '심볼': exchange_rate_info.find_element(By.CLASS_NAME, 'symbol').text,
-            '현재가': float(exchange_rate_info.find_elements(By.CLASS_NAME, 'num')[0].text.replace(",", '')),
-            '전일대비': float(exchange_rate_info.find_elements(By.CLASS_NAME, 'num')[1].text.replace(",", '')),
-            '등락율': exchange_rate_info.find_elements(By.CLASS_NAME, 'num')[2].text
-        }
-        exchange_rate_array.append(temp)
-
-        # if 'AUD' in temp['심볼']:
-        #     print(temp)
-
-    page_number += 1
-
-print(exchange_rate_array)
-"""

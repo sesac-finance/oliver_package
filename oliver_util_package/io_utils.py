@@ -1,4 +1,3 @@
-
 def get_config_data(param: str) -> dict():
     """
     Read configuration from config_file

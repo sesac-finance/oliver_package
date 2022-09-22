@@ -14,7 +14,7 @@ def without_kor(text: str) -> str:
     :param text:str
     :return: str
     """
-    # logger.info(text)
+    logger.debug(text)
     return re.sub('[가-힣]', '', text).strip()
 
 def crawling_element(url: str, element_name: str) -> str:
@@ -27,7 +27,7 @@ def crawling_element(url: str, element_name: str) -> str:
     """
     response = requests.get(url, headers=HEADERS)
     soup = BeautifulSoup(response.text, 'html.parser')
-    # logger.info(soup)
+    logger.debug(soup)
     return soup.select_one(element_name).text
 
 def crawling_elements(url: str, element_name: str) -> list:
@@ -40,6 +40,6 @@ def crawling_elements(url: str, element_name: str) -> list:
     """
     response = requests.get(url, headers=HEADERS)
     soup = BeautifulSoup(response.text, 'html.parser')
-    # logger.info(soup)
+    logger.debug(soup)
     return soup.select(element_name)
 

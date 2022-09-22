@@ -53,9 +53,8 @@ def send_mail_html(receiver:str, subject:str, contents_html:str, file_path:str):
     try:
         email_dict = io_utils.get_config_data("email")
 
-        # logger.info(email_dict)
         logger.info(receiver + ' : ' +  subject + ' : ' +  file_path)
-        # logger.info(contents_html)
+        logger.debug(contents_html)
 
         # email info
         msg = MIMEMultipart()
@@ -78,11 +77,11 @@ def send_mail_html(receiver:str, subject:str, contents_html:str, file_path:str):
             msg.attach(file_attach(file_path))
 
         smtp = smtplib.SMTP_SSL(email_dict['SMTP_SERVER'], email_dict['SMTP_PORT'])
-        logger.info('Serv connection Success!')
+        logger.debug('Serv connection Success!')
         smtp.login(email_dict['SMTP_USER'], email_dict['SMTP_PASSWORD'])
-        logger.info('Login Success!')
+        logger.debug('Login Success!')
         smtp.sendmail(email_dict['SMTP_USER'], receiver, msg.as_string())
-        logger.info('Sending email Success!')
+        logger.debug('Sending email Success!')
     except Exception as e:
         logger.warning(e)
         pass
@@ -92,7 +91,7 @@ def send_mail_html(receiver:str, subject:str, contents_html:str, file_path:str):
 
 def send_mail(receiver:str, subject:str, contents:str, file_path:str):
     """
-    Sending email with string text
+    Sending email with string text(only test purpose)
 
     :param receiver:str
     :param subject:str
@@ -103,7 +102,6 @@ def send_mail(receiver:str, subject:str, contents:str, file_path:str):
     try:
         email_dict = io_utils.get_config_data("email")
 
-        logger.info(email_dict)
         logger.info(receiver + ' : ' +  subject + ' : ' +   contents + ' : ' +  file_path)
 
         # email info
@@ -120,11 +118,11 @@ def send_mail(receiver:str, subject:str, contents:str, file_path:str):
             msg.attach(file_attach(file_path))
 
         smtp = smtplib.SMTP_SSL(email_dict['SMTP_SERVER'], email_dict['SMTP_PORT'])
-        logger.info('Serv connection Success!')
+        logger.debug('Serv connection Success!')
         smtp.login(email_dict['SMTP_USER'], email_dict['SMTP_PASSWORD'])
-        logger.info('Login Success!')
+        logger.debug('Login Success!')
         smtp.sendmail(email_dict['SMTP_USER'], receiver, msg.as_string(contents))
-        logger.info('Sending email Success!')
+        logger.debug('Sending email Success!')
     except Exception as e:
         logger.warning(e)
         pass
