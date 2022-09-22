@@ -2,7 +2,7 @@ import os
 import pathlib
 # 실행하는 파일의 경로로 현재 작업 디렉토리를 변경 for ubuntu
 os.chdir(pathlib.Path(__file__).parent.absolute())
-
+ 
 import itertools
 
 import pandas as pd
