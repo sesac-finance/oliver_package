@@ -29,6 +29,8 @@ pd.set_option('display.colheader_justify', 'left')
 # if DataFrame kor broken
 # tabulate.WIDE_CHARS_MODE=False
 
+logger = log_utils.logging.getLogger()
+
 try:
 
     # 브라우저 꺼짐 방지
@@ -47,7 +49,6 @@ try:
 
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
-    logger = log_utils.logging.getLogger()
 
     if (result := crawling_utils.without_kor(
             crawling_utils.crawling_element('https://finance.naver.com/marketindex/?tabSel=exchange#tab_section',
