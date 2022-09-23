@@ -14,8 +14,6 @@ import datetime
 from oliver_util_package import io_utils
 from oliver_util_package import log_utils
 
-import logging
-
 logger = log_utils.logging.getLogger()
 
 def file_attach(file_path: str) -> MIMEBase:

@@ -9,20 +9,19 @@ import pandas as pd
 from tabulate import tabulate
 from pretty_html_table import build_table
 
-import selenium
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
 import urllib.error as urle
 import datetime
+# for local test
+from selenium.webdriver.chrome.options import Options
 
 # custom utils
 from oliver_util_package import crawling_utils
 from oliver_util_package import log_utils
 from oliver_util_package import email_utils
-import logging
 
 logger = log_utils.logging.getLogger()
 

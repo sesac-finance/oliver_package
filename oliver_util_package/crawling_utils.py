@@ -2,7 +2,6 @@ import requests
 from bs4 import BeautifulSoup
 import re
 from oliver_util_package import log_utils
-import logging
 
 HEADERS = {'User-Agent': 'application/json;charset=utf-8'}
 logger = log_utils.logging.getLogger()
