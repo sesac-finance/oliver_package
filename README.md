@@ -8,8 +8,7 @@
    * │ ├── db_utils.py
    * │ ├── email_utils.py
    * │ ├── io_utils.py
-   * │ ├── log_utils.py 
-   * │ └── 
+   * │ └──  log_utils.py
    * └──  
 
  * Project File

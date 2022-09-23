@@ -2,7 +2,7 @@ import os
 import pathlib
 # 실행하는 파일의 경로로 현재 작업 디렉토리를 변경 for ubuntu
 os.chdir(pathlib.Path(__file__).parent.absolute())
- 
+
 import itertools
 
 import pandas as pd
@@ -51,6 +51,7 @@ try:
 
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
+    # round info
     if (result := crawling_utils.without_kor(
             crawling_utils.crawling_element('https://finance.naver.com/marketindex/?tabSel=exchange#tab_section',
                                             '.section_exchange .round'))) != (open('./round.txt', 'r').read().rstrip()):
@@ -114,7 +115,6 @@ try:
             by='거래결과(KRW)', ascending=False)
         possible_arbitrage_df.reset_index(inplace=True, drop=True)
         # Arbitrage Calculation Compelte : possible_arbitrage_df
-
 
         logger.debug(possible_arbitrage_df[['재정거래 흐름', '거래결과(KRW)', '최종수익(KRW)']])
 
